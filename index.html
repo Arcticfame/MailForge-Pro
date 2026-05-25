@@ -429,6 +429,153 @@ footer{text-align:center;padding:36px 20px;border-top:1px solid var(--border);ma
 .footer-sub{font-size:12px;color:var(--muted);margin-top:4px;font-family:var(--mono)}
 .footer-cr{font-size:11px;color:#bbb8b2;margin-top:10px}
 
+/* ── HERO GRADIENT ── */
+.hero-banner {
+  position: relative;
+  overflow: hidden;
+}
+.hero-banner::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 320px; height: 320px;
+  background: radial-gradient(circle, rgba(200,164,74,0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+.hero-banner > * { position: relative; z-index: 1; }
+
+/* ── SIDEBAR SEARCH ── */
+.sidebar-search {
+  padding: 10px 12px 6px;
+  position: relative;
+}
+.sidebar-search input {
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 8px 12px 8px 32px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: rgba(255,255,255,0.75);
+  outline: none;
+  transition: all 0.2s;
+  letter-spacing: 0.03em;
+}
+.sidebar-search input::placeholder { color: rgba(255,255,255,0.25); }
+.sidebar-search input:focus {
+  border-color: rgba(200,164,74,0.45);
+  background: rgba(200,164,74,0.07);
+  box-shadow: 0 0 0 3px rgba(200,164,74,0.08);
+}
+.sidebar-search-icon {
+  position: absolute;
+  left: 22px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* ── KEYBOARD SHORTCUT BADGE ── */
+.snav-kbd {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.25);
+  border-radius: 4px;
+  padding: 1px 5px;
+  flex-shrink: 0;
+  letter-spacing: 0;
+  line-height: 1.6;
+  transition: all 0.15s;
+}
+.snav-item:hover .snav-kbd { color: rgba(255,255,255,0.4); border-color: rgba(255,255,255,0.2); }
+.snav-item.active .snav-kbd { background: rgba(200,164,74,0.15); border-color: rgba(200,164,74,0.3); color: rgba(200,164,74,0.7); }
+
+/* ── BACK TO TOP BUTTON ── */
+.back-to-top {
+  position: fixed;
+  bottom: 28px; right: 28px;
+  width: 40px; height: 40px;
+  background: var(--ink);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  color: rgba(255,255,255,0.7);
+  font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  z-index: 500;
+  opacity: 0; pointer-events: none;
+  transform: translateY(12px);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.back-to-top.show { opacity: 1; pointer-events: all; transform: translateY(0); }
+.back-to-top:hover { background: var(--gold); color: var(--ink); border-color: transparent; transform: translateY(-2px); }
+@media(max-width:768px){ .back-to-top { bottom: 16px; right: 12px; width: 36px; height: 36px; font-size: 14px; } }
+
+/* ── PANEL HOVER LIFT ── */
+.panel { transition: box-shadow 0.2s ease; }
+.panel:hover { box-shadow: 0 2px 16px rgba(0,0,0,0.06); }
+
+/* ── STAT ANIMATED NUMBER ── */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.stat-val { animation: countUp 0.4s ease both; }
+
+/* ── RESULT CARD GLOW ── */
+.result-card { transition: box-shadow 0.3s ease; }
+.result-card[style*="block"] { box-shadow: 0 0 0 1px rgba(200,164,74,0.2), 0 8px 40px rgba(200,164,74,0.08); }
+
+/* ── DROP ZONE PULSE ── */
+@keyframes pulseGold {
+  0%,100% { border-color: var(--border-strong); }
+  50%      { border-color: var(--gold); }
+}
+.drop-zone.dragover { animation: pulseGold 1s infinite; }
+
+/* ── TOOL BADGE COUNT ── */
+.sidebar-tools-count {
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 700;
+  color: rgba(200,164,74,0.6);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0 18px 8px;
+}
+
+/* ── PROGRESS BAR SHIMMER ── */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.prog-fill {
+  background-size: 200% auto;
+  background-image: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-dark));
+  animation: shimmer 2s linear infinite;
+}
+
+/* ── SNAV ITEM NO-RESULT ── */
+.snav-no-result {
+  padding: 12px 18px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 0.06em;
+}
+
+/* ── TOPBAR GRADIENT ── */
+.topbar {
+  background: linear-gradient(90deg, #0c0e14 0%, #111420 100%);
+}
+
 /* ══════════════════════════════════════════
    MOBILE NAV — CUTOUT BOTTOM SHEET
 ══════════════════════════════════════════ */
@@ -827,66 +974,86 @@ footer{text-align:center;padding:36px 20px;border-top:1px solid var(--border);ma
 
     <div class="sidebar-label">Tools</div>
 
-    <div class="snav-item active" id="sni-0" onclick="snavGo(0)">
-      <span class="snav-icon">🌱</span>
-      <span class="snav-label">LeadSeed</span>
-      <span class="snav-badge snav-badge-gold">SEED</span>
+    <!-- Search -->
+    <div class="sidebar-search">
+      <span class="sidebar-search-icon">🔎</span>
+      <input type="text" id="sidebarSearch" placeholder="Search tools..." oninput="filterSidebar(this.value)" autocomplete="off"/>
     </div>
+    <div class="sidebar-tools-count" id="sidebarToolCount">9 tools available</div>
 
-    <div class="snav-item" id="sni-1" onclick="snavGo(1)">
-      <span class="snav-icon">✂️</span>
-      <span class="snav-label">List Splitter</span>
-      <span class="snav-badge snav-badge-gold">SPLIT</span>
-    </div>
+    <div id="snavList">
+      <div class="snav-item active" id="sni-0" onclick="snavGo(0)" data-label="LeadSeed seed test email">
+        <span class="snav-icon">🌱</span>
+        <span class="snav-label">LeadSeed</span>
+        <span class="snav-badge snav-badge-gold">SEED</span>
+        <span class="snav-kbd">1</span>
+      </div>
 
-    <div class="snav-item" id="sni-2" onclick="snavGo(2)">
-      <span class="snav-icon">⚗️</span>
-      <span class="snav-label">Variation Gen</span>
-      <span class="snav-badge snav-badge-gold">GEN</span>
-    </div>
+      <div class="snav-item" id="sni-1" onclick="snavGo(1)" data-label="List Splitter split files zip">
+        <span class="snav-icon">✂️</span>
+        <span class="snav-label">List Splitter</span>
+        <span class="snav-badge snav-badge-gold">SPLIT</span>
+        <span class="snav-kbd">2</span>
+      </div>
 
-    <div class="snav-item" id="sni-3" onclick="snavGo(3)">
-      <span class="snav-icon">🧹</span>
-      <span class="snav-label">Extractor</span>
-      <span class="snav-badge snav-badge-gold">CLEAN</span>
-    </div>
+      <div class="snav-item" id="sni-2" onclick="snavGo(2)" data-label="Variation Gen generator subject body">
+        <span class="snav-icon">⚗️</span>
+        <span class="snav-label">Variation Gen</span>
+        <span class="snav-badge snav-badge-gold">GEN</span>
+        <span class="snav-kbd">3</span>
+      </div>
 
-    <div class="snav-item" id="sni-4" onclick="snavGo(4)">
-      <span class="snav-icon">🔍</span>
-      <span class="snav-label">Deduplicator</span>
-    </div>
+      <div class="snav-item" id="sni-3" onclick="snavGo(3)" data-label="Extractor cleaner bounce filter">
+        <span class="snav-icon">🧹</span>
+        <span class="snav-label">Extractor</span>
+        <span class="snav-badge snav-badge-gold">CLEAN</span>
+        <span class="snav-kbd">4</span>
+      </div>
 
-    <div class="snav-divider"></div>
+      <div class="snav-item" id="sni-4" onclick="snavGo(4)" data-label="Deduplicator remove duplicates unique">
+        <span class="snav-icon">🔍</span>
+        <span class="snav-label">Deduplicator</span>
+        <span class="snav-kbd">5</span>
+      </div>
 
-    <div class="snav-item" id="sni-5" onclick="snavGo(5)">
-      <span class="snav-icon">⚙️</span>
-      <span class="snav-label">Bulk Tools</span>
-    </div>
+      <div class="snav-divider" id="snavDiv1"></div>
 
-    <div class="snav-item" id="sni-6" onclick="snavGo(6)">
-      <span class="snav-icon">🔀</span>
-      <span class="snav-label">Randomizer</span>
-    </div>
+      <div class="snav-item" id="sni-5" onclick="snavGo(5)" data-label="Bulk Tools delimiter inject validate">
+        <span class="snav-icon">⚙️</span>
+        <span class="snav-label">Bulk Tools</span>
+        <span class="snav-kbd">6</span>
+      </div>
 
-    <div class="snav-divider"></div>
+      <div class="snav-item" id="sni-6" onclick="snavGo(6)" data-label="Randomizer shuffle list fisher yates">
+        <span class="snav-icon">🔀</span>
+        <span class="snav-label">Randomizer</span>
+        <span class="snav-kbd">7</span>
+      </div>
 
-    <div class="snav-item" id="sni-7" onclick="snavGo(7)">
-      <span class="snav-icon">🖼️</span>
-      <span class="snav-label">Image Renamer</span>
-      <span class="snav-badge snav-badge-green">NEW</span>
-    </div>
+      <div class="snav-divider" id="snavDiv2"></div>
 
-    <div class="snav-item" id="sni-8" onclick="snavGo(8)">
-      <span class="snav-icon">⇄</span>
-      <span class="snav-label">Col Converter</span>
-      <span class="snav-badge snav-badge-green">NEW</span>
-    </div>
+      <div class="snav-item" id="sni-7" onclick="snavGo(7)" data-label="Image Renamer bulk rename photos">
+        <span class="snav-icon">🖼️</span>
+        <span class="snav-label">Image Renamer</span>
+        <span class="snav-badge snav-badge-green">NEW</span>
+        <span class="snav-kbd">8</span>
+      </div>
 
-    <div class="snav-divider"></div>
+      <div class="snav-item" id="sni-8" onclick="snavGo(8)" data-label="Col Converter column delimited convert">
+        <span class="snav-icon">⇄</span>
+        <span class="snav-label">Col Converter</span>
+        <span class="snav-badge snav-badge-green">NEW</span>
+        <span class="snav-kbd">9</span>
+      </div>
 
-    <div class="snav-item" id="sni-9" onclick="snavGo(9)">
-      <span class="snav-icon">👤</span>
-      <span class="snav-label">About Dev</span>
+      <div class="snav-divider" id="snavDiv3"></div>
+
+      <div class="snav-item" id="sni-9" onclick="snavGo(9)" data-label="About Dev developer contact siyam">
+        <span class="snav-icon">👤</span>
+        <span class="snav-label">About Dev</span>
+      </div>
+
+      <div id="snavNoResult" class="snav-no-result" style="display:none">No tools match</div>
     </div>
 
     <div class="sidebar-footer">
@@ -1657,6 +1824,9 @@ footer{text-align:center;padding:36px 20px;border-top:1px solid var(--border);ma
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
+
+<!-- BACK TO TOP -->
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ═══════════════════════════════════════════════
@@ -2601,6 +2771,106 @@ function sidebarClose(){
   document.getElementById('sidebarOverlay').classList.remove('show');
   document.getElementById('mnavTrigger').classList.remove('is-open');
   document.body.style.overflow = '';
+}
+
+// ═══════════════════════════════════════════════
+// SIDEBAR SEARCH
+// ═══════════════════════════════════════════════
+function filterSidebar(q){
+  const query = q.trim().toLowerCase();
+  const items = document.querySelectorAll('#snavList .snav-item');
+  const dividers = document.querySelectorAll('#snavList .snav-divider');
+  let visible = 0;
+
+  if(!query){
+    items.forEach(el => el.style.display = '');
+    dividers.forEach(el => el.style.display = '');
+    document.getElementById('snavNoResult').style.display = 'none';
+    document.getElementById('sidebarToolCount').textContent = '9 tools available';
+    return;
+  }
+
+  dividers.forEach(el => el.style.display = 'none');
+  items.forEach(el => {
+    const label = (el.dataset.label || el.querySelector('.snav-label')?.textContent || '').toLowerCase();
+    const match = label.includes(query);
+    el.style.display = match ? '' : 'none';
+    if(match) visible++;
+  });
+
+  document.getElementById('snavNoResult').style.display = visible ? 'none' : 'block';
+  document.getElementById('sidebarToolCount').textContent = `${visible} tool${visible!==1?'s':''} found`;
+}
+
+// ═══════════════════════════════════════════════
+// KEYBOARD SHORTCUTS
+// ═══════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  // Don't fire when typing in inputs
+  if(['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) return;
+  const key = parseInt(e.key);
+  if(key >= 1 && key <= 9){
+    snavGo(key - 1);
+    return;
+  }
+  if(e.key === 'Escape'){
+    sidebarClose();
+    return;
+  }
+  // '/' or Ctrl+K to focus sidebar search
+  if(e.key === '/' || (e.ctrlKey && e.key === 'k')){
+    e.preventDefault();
+    const searchEl = document.getElementById('sidebarSearch');
+    if(searchEl){
+      if(window.innerWidth <= 768) sidebarOpen();
+      searchEl.focus();
+    }
+  }
+});
+
+// ═══════════════════════════════════════════════
+// BACK TO TOP BUTTON
+// ═══════════════════════════════════════════════
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('backToTop');
+  if(btn) btn.classList.toggle('show', window.scrollY > 300);
+}, { passive: true });
+
+// Also watch the main content scroll
+document.addEventListener('DOMContentLoaded', () => {
+  const mc = document.getElementById('mainContent');
+  if(mc){
+    mc.addEventListener('scroll', () => {
+      const btn = document.getElementById('backToTop');
+      if(btn) btn.classList.toggle('show', mc.scrollTop > 300);
+    }, { passive: true });
+  }
+});
+
+// ═══════════════════════════════════════════════
+// STAT COUNTER ANIMATION
+// ═══════════════════════════════════════════════
+function animateStatVal(el, endVal){
+  if(isNaN(endVal) || endVal < 1) return;
+  const duration = 600;
+  const start = performance.now();
+  const startVal = 0;
+  function update(now){
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(startVal + (endVal - startVal) * ease).toLocaleString();
+    if(progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+// Intercept statHtml to animate numbers
+const _origStatHtml = statHtml;
+function statHtml(stats){
+  const html = _origStatHtml(stats);
+  // After DOM insert, animate numbers (called externally)
+  return html;
 }
 </script>
 </body>
