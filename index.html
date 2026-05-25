@@ -3,15 +3,10 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>MailForge Pro v4.0 — by Siyam Ahmed</title>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-VD1NCZ59JM"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-VD1NCZ59JM');
-</script>
+<title>MailForge Pro v5.0 — by Siyam Ahmed</title>
+<meta name="description" content="10 professional email marketing tools. 100% local, zero signup — nothing leaves your browser."/>
+<meta name="theme-color" content="#080b14"/>
+<link rel="manifest" href="manifest.json"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,700&family=Inter:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
@@ -39,6 +34,7 @@
   --sans: 'Inter', sans-serif;
   --display: 'Playfair Display', serif;
   --shadow-sm: 0 1px 4px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --theme-transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
   --shadow-md: 0 4px 20px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
   --shadow-lg: 0 8px 40px rgba(0,0,0,0.12), 0 4px 10px rgba(0,0,0,0.06);
 }
@@ -46,9 +42,41 @@
 html{scroll-behavior:smooth}
 body{background:var(--paper);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 
+/* ── DARK THEME ── */
+[data-theme="dark"] {
+  --ink: #e8eaf0;
+  --paper: #111318;
+  --surface: #191c26;
+  --border: #2a2d3a;
+  --border-strong: #3a3e50;
+  --gold: #d4ae5c;
+  --gold-light: rgba(212,174,92,0.12);
+  --gold-dark: #b8922e;
+  --text: #e0e2ea;
+  --muted: #8a8d9a;
+  --subtle: #5a5d6a;
+  --sidebar-bg: #0d0f18;
+  --green: #2ea865;
+  --green-bg: rgba(46,168,101,0.12);
+  --red: #c0394e;
+  --red-bg: rgba(192,57,78,0.12);
+  --shadow-sm: 0 1px 4px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-md: 0 4px 20px rgba(0,0,0,0.35), 0 2px 6px rgba(0,0,0,0.2);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.5), 0 4px 10px rgba(0,0,0,0.3);
+}
+@media (prefers-color-scheme:dark) {
+  :root:not([data-theme="light"]):not([data-theme="dark"]) {
+    --ink:#e8eaf0;--paper:#111318;--surface:#191c26;--border:#2a2d3a;--border-strong:#3a3e50;
+    --gold:#d4ae5c;--gold-light:rgba(212,174,92,0.12);--gold-dark:#b8922e;
+    --text:#e0e2ea;--muted:#8a8d9a;--subtle:#5a5d6a;--sidebar-bg:#0d0f18;
+    --green:#2ea865;--green-bg:rgba(46,168,101,0.12);--red:#c0394e;--red-bg:rgba(192,57,78,0.12);
+    --shadow-sm:0 1px 4px rgba(0,0,0,0.3);--shadow-md:0 4px 20px rgba(0,0,0,0.35);--shadow-lg:0 8px 40px rgba(0,0,0,0.5);
+  }
+}
+
 /* ── TOP BAR ── */
 .topbar {
-  background: var(--ink);
+  background: var(--sidebar-bg);
   color: white;
   padding: 0 28px;
   height: 58px;
@@ -533,6 +561,92 @@ footer{text-align:center;padding:40px 20px;border-top:1px solid var(--border);ma
 .snav-item:hover .snav-kbd { color: rgba(255,255,255,0.4); border-color: rgba(255,255,255,0.2); }
 .snav-item.active .snav-kbd { background: rgba(200,164,74,0.15); border-color: rgba(200,164,74,0.3); color: rgba(200,164,74,0.7); }
 
+/* ── THEME TOGGLE ── */
+.theme-toggle {
+  display: flex; align-items: center;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 0; overflow: hidden;
+  gap: 0;
+}
+.theme-btn {
+  width: 30px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 13px;
+  color: rgba(255,255,255,0.35);
+  transition: all 0.15s;
+  border: none; background: transparent;
+}
+.theme-btn:hover { color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.08); }
+.theme-btn.active { background: rgba(201,168,76,0.2); color: var(--gold); }
+
+/* ── COMMAND PALETTE ── */
+.cmd-overlay {
+  position: fixed; inset: 0; z-index: 9000;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(6px);
+  display: flex; align-items: flex-start; justify-content: center;
+  padding-top: 14vh;
+  animation: cmdFadeIn 0.15s ease;
+}
+@keyframes cmdFadeIn { from { opacity:0 } to { opacity:1 } }
+.cmd-box {
+  width: 540px; max-width: calc(100vw - 32px);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 16px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.05);
+  overflow: hidden;
+  animation: cmdSlideIn 0.18s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes cmdSlideIn { from { transform: translateY(-12px); opacity:0 } to { transform: translateY(0); opacity:1 } }
+.cmd-search-wrap {
+  display: flex; align-items: center; gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.cmd-search-icon { color: var(--muted); font-size: 16px; flex-shrink: 0; }
+.cmd-search-wrap input {
+  flex: 1; background: transparent; border: none; outline: none;
+  font-family: var(--sans); font-size: 15px; color: var(--text);
+  font-weight: 500;
+}
+.cmd-search-wrap input::placeholder { color: var(--subtle); }
+.cmd-esc {
+  font-family: var(--mono); font-size: 10px; color: var(--subtle);
+  background: var(--paper); border: 1px solid var(--border);
+  border-radius: 5px; padding: 2px 7px; flex-shrink: 0; cursor: pointer;
+}
+.cmd-results { max-height: 360px; overflow-y: auto; padding: 8px; }
+.cmd-section-label {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--subtle);
+  padding: 8px 12px 4px; font-weight: 600;
+}
+.cmd-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px; border-radius: 9px; cursor: pointer;
+  transition: background 0.1s;
+}
+.cmd-item:hover, .cmd-item.focused { background: var(--paper); }
+.cmd-item-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--paper); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; color: var(--muted);
+}
+.cmd-item-icon svg { width: 15px; height: 15px; }
+.cmd-item.focused .cmd-item-icon { background: var(--gold-light); border-color: var(--gold); color: var(--gold-dark); }
+.cmd-item-label { font-size: 14px; font-weight: 500; color: var(--text); letter-spacing: -0.01em; flex: 1; }
+.cmd-item-desc { font-size: 11px; color: var(--subtle); font-family: var(--mono); }
+.cmd-item-kbd {
+  font-family: var(--mono); font-size: 9px; color: var(--subtle);
+  background: var(--paper); border: 1px solid var(--border);
+  border-radius: 4px; padding: 1px 6px; flex-shrink: 0;
+}
+.cmd-empty { text-align: center; padding: 32px; color: var(--subtle); font-size: 13px; }
+
 /* ── BACK TO TOP BUTTON ── */
 .back-to-top {
   position: fixed;
@@ -979,6 +1093,18 @@ footer{text-align:center;padding:40px 20px;border-top:1px solid var(--border);ma
 </head>
 <body>
 
+<!-- ══ COMMAND PALETTE ══ -->
+<div id="cmdPalette" class="cmd-overlay" style="display:none" onclick="cmdClose(event)">
+  <div class="cmd-box" onclick="event.stopPropagation()">
+    <div class="cmd-search-wrap">
+      <span class="cmd-search-icon">⌘</span>
+      <input id="cmdInput" type="text" placeholder="Search tools & actions…" autocomplete="off" oninput="cmdFilter(this.value)" onkeydown="cmdKey(event)"/>
+      <span class="cmd-esc" onclick="cmdClose()">ESC</span>
+    </div>
+    <div id="cmdResults" class="cmd-results"></div>
+  </div>
+</div>
+
 <!-- ══ TOPBAR ══ -->
 <header class="topbar">
   <div class="logo">
@@ -991,7 +1117,12 @@ footer{text-align:center;padding:40px 20px;border-top:1px solid var(--border);ma
     <div class="logo-name">Mail<span>Forge</span> Pro</div>
   </div>
   <div class="topbar-right">
-    <span class="v-chip">v4.0</span>
+    <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+      <button class="theme-btn" id="tbLight" onclick="setTheme('light')" title="Light">☀️</button>
+      <button class="theme-btn" id="tbAuto"  onclick="setTheme('auto')"  title="System">⚙️</button>
+      <button class="theme-btn" id="tbDark"  onclick="setTheme('dark')"  title="Dark">🌙</button>
+    </button>
+    <span class="v-chip">v5.0</span>
     <span class="topbar-by">by Siyam Ahmed</span>
     <button class="mnav-trigger" id="mnavTrigger" onclick="sidebarOpen()" aria-label="Menu">
       <div class="mnav-bars"><span></span><span></span><span></span></div>
@@ -1083,9 +1214,16 @@ footer{text-align:center;padding:40px 20px;border-top:1px solid var(--border);ma
         <span class="snav-kbd">9</span>
       </div>
 
+      <div class="snav-item" id="sni-9" onclick="snavGo(9)" data-label="Email Verifier verify validate syntax disposable role">
+        <span class="snav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
+        <span class="snav-label">Email Verifier</span>
+        <span class="snav-badge snav-badge-green">NEW</span>
+        <span class="snav-kbd">0</span>
+      </div>
+
       <div class="snav-divider" id="snavDiv3"></div>
 
-      <div class="snav-item" id="sni-9" onclick="snavGo(9)" data-label="About Dev developer contact siyam">
+      <div class="snav-item" id="sni-10" onclick="snavGo(10)" data-label="About Dev developer contact siyam">
         <span class="snav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
         <span class="snav-label">About Dev</span>
       </div>
@@ -1094,7 +1232,7 @@ footer{text-align:center;padding:40px 20px;border-top:1px solid var(--border);ma
     </div>
 
     <div class="sidebar-footer">
-      <div class="sidebar-footer-txt">MailForge Pro v4.0<br/>100% local · no signup<br/>by Siyam Ahmed</div>
+      <div class="sidebar-footer-txt">MailForge Pro v5.0<br/>10 tools · 100% local · no signup<br/>by Siyam Ahmed</div>
     </div>
 
   </aside>
@@ -1274,7 +1412,8 @@ footer{text-align:center;padding:40px 20px;border-top:1px solid var(--border);ma
             <div class="toggle-pill" onclick="setSubStyle('friendly',this)">Friendly</div>
           </div>
         </div>
-        <div class="field"><label class="lbl">Custom Subject (optional — overrides templates)</label><input type="text" id="vCustomSub" placeholder="Leave blank to use templates"/></div>
+        <div class="field"><label class="lbl">Custom Subject (optional — overrides templates)</label><input type="text" id="vCustomSub" placeholder="Leave blank to use templates" oninput="spamCheck()"/></div>
+        <div id="spamScore" style="display:none;margin-top:8px"></div>
       </div>
     </div>
     <div class="panel">
@@ -1417,6 +1556,7 @@ footer{text-align:center;padding:40px 20px;border-top:1px solid var(--border);ma
           <label class="check-row"><input type="checkbox" id="dupSort" checked/> Sort alphabetically</label>
           <label class="check-row"><input type="checkbox" id="dupShowDups"/> Show duplicates list</label>
           <label class="check-row"><input type="checkbox" id="dupGroup"/> Group by domain</label>
+          <label class="check-row"><input type="checkbox" id="dupNormGmail" checked/> Normalise Gmail dots/+tags</label>
         </div>
         <div class="btn-group">
           <button class="btn btn-primary" onclick="removeDups()">Remove Duplicates</button>
@@ -1424,6 +1564,25 @@ footer{text-align:center;padding:40px 20px;border-top:1px solid var(--border);ma
         </div>
       </div>
     </div>
+    <!-- Cross-list dedup -->
+    <div class="panel">
+      <div class="panel-hd"><div class="panel-title"><div class="step-dot gold">A↔B</div> Cross-List Dedup</div></div>
+      <div class="panel-bd">
+        <div class="field" style="margin-bottom:10px"><label class="lbl">List B (compare against List A above)</label><textarea id="dupCrossB" rows="5" placeholder="Paste second list here…"></textarea></div>
+        <div class="two-col" style="margin-bottom:10px">
+          <div class="field"><label class="lbl">Result Mode</label>
+            <select id="crossMode">
+              <option value="a-only">A − B (in A, not in B)</option>
+              <option value="b-only">B − A (in B, not in A)</option>
+              <option value="intersect">A ∩ B (in both)</option>
+              <option value="union">A ∪ B (all unique)</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="crossListDedup()">Cross-List Compare →</button>
+      </div>
+    </div>
+
     <div id="dupResultPanel" style="display:none">
       <div class="panel" style="margin-top:0">
         <div class="panel-hd"><div class="panel-title"><div class="step-dot ok">✓</div> Result</div><div class="btn-group">
@@ -1482,7 +1641,52 @@ footer{text-align:center;padding:40px 20px;border-top:1px solid var(--border);ma
         <button class="btn btn-primary" onclick="injectLines()">Inject Lines</button>
       </div>
     </div>
-    <!-- Advanced tools -->
+    <!-- Find & Replace -->
+    <div class="panel">
+      <div class="panel-hd"><div class="panel-title"><div class="step-dot gold">F→R</div> Find &amp; Replace</div></div>
+      <div class="panel-bd">
+        <div class="two-col" style="margin-bottom:10px">
+          <div class="field"><label class="lbl">Find</label><input type="text" id="frFind" placeholder="text or /regex/"/></div>
+          <div class="field"><label class="lbl">Replace with</label><input type="text" id="frReplace" placeholder="replacement (blank to delete)"/></div>
+        </div>
+        <div style="display:flex;gap:16px;margin-bottom:10px">
+          <label class="check-row"><input type="checkbox" id="frRegex"/> Use regex</label>
+          <label class="check-row"><input type="checkbox" id="frCase"/> Case-sensitive</label>
+        </div>
+        <button class="btn btn-primary" onclick="findReplace()">Find &amp; Replace →</button>
+      </div>
+    </div>
+    <!-- Sort + Case -->
+    <div class="panel">
+      <div class="panel-hd"><div class="panel-title"><div class="step-dot gold">↕</div> Sort &amp; Case</div></div>
+      <div class="panel-bd">
+        <div class="two-col" style="margin-bottom:10px">
+          <div class="field"><label class="lbl">Sort Mode</label>
+            <select id="sortMode">
+              <option value="alpha">Alphabetical A→Z</option>
+              <option value="alpha-d">Alphabetical Z→A</option>
+              <option value="length">Length (short first)</option>
+              <option value="length-d">Length (long first)</option>
+              <option value="domain">By domain</option>
+              <option value="random">Random shuffle</option>
+            </select>
+          </div>
+          <div class="field"><label class="lbl">Case Transform</label>
+            <select id="caseMode">
+              <option value="lower">lowercase</option>
+              <option value="upper">UPPERCASE</option>
+              <option value="title">Title Case</option>
+              <option value="trim">Trim whitespace</option>
+            </select>
+          </div>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-primary" onclick="sortList()">Sort</button>
+          <button class="btn btn-outline" onclick="caseTransform()">Case Transform</button>
+        </div>
+      </div>
+    </div>
+    <!-- Advanced analysis -->
     <div class="panel">
       <div class="panel-hd"><div class="panel-title"><div class="step-dot">🔎</div> Advanced Analysis</div></div>
       <div class="panel-bd">
@@ -1523,7 +1727,14 @@ footer{text-align:center;padding:40px 20px;border-top:1px solid var(--border);ma
       <div class="panel-bd"><div class="field"><label class="lbl">Paste your list here (one item per line)</label><textarea id="randInput" rows="10" placeholder="Paste emails or any list..."></textarea></div></div>
     </div>
     <div class="panel">
-      <div class="panel-bd"><button class="btn btn-primary btn-full" onclick="randomizeList()">🔀 Shuffle List</button></div>
+      <div class="panel-hd"><div class="panel-title"><div class="step-dot gold">⚙</div> Options</div></div>
+      <div class="panel-bd">
+        <div class="two-col" style="margin-bottom:14px">
+          <div class="field"><label class="lbl">Seed (leave blank = random)</label><input type="text" id="randSeed" placeholder="e.g. myseed42"/></div>
+          <div class="field"><label class="lbl">Sample N items (0 = all)</label><input type="number" id="randSample" value="0" min="0"/></div>
+        </div>
+        <button class="btn btn-primary btn-full" onclick="randomizeList()">🔀 Shuffle / Sample</button>
+      </div>
     </div>
     <div id="randResultPanel" style="display:none">
       <div class="panel">
@@ -1695,8 +1906,26 @@ footer{text-align:center;padding:40px 20px;border-top:1px solid var(--border);ma
             </div>
           </div>
         </div>
-        <!-- Random chunking -->
+        <!-- Output format -->
         <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
+          <div class="two-col" style="margin-bottom:14px">
+            <div class="field"><label class="lbl">Output Format</label>
+              <select id="cvOutputFmt" onchange="cvConvert()">
+                <option value="delimited">Delimited (default)</option>
+                <option value="json">JSON Array</option>
+                <option value="jsonl">JSON Lines</option>
+                <option value="sql">SQL INSERT</option>
+                <option value="md">Markdown Table</option>
+                <option value="html">HTML Table</option>
+              </select>
+            </div>
+            <div class="field"><label class="lbl">Table / Column Name</label>
+              <input type="text" id="cvTblName" placeholder="records" oninput="cvConvert()"/>
+            </div>
+          </div>
+        </div>
+        <!-- Random chunking -->
+        <div style="margin-top:0;padding-top:16px;border-top:1px solid var(--border)">
           <label class="check-row" style="margin-bottom:12px"><input type="checkbox" id="cvRandEn" onchange="cvToggleRand()"/> Random chunk grouping — split output into random-sized groups</label>
           <div id="cvRandBody" style="display:none">
             <div class="two-col">
@@ -1711,8 +1940,57 @@ footer{text-align:center;padding:40px 20px;border-top:1px solid var(--border);ma
 </div>
 
 
-<!-- PAGE 9: ABOUT DEV -->
+<!-- PAGE 9: EMAIL VERIFIER -->
 <div class="page" id="page9">
+  <div class="hero-banner">
+    <div class="eyebrow"><div class="eyebrow-line"></div><div class="eyebrow-text">Email Verifier</div></div>
+    <h2>Verify &amp; Score<br/>Your <em>Email List</em></h2>
+    <p>Offline heuristic checks — syntax, disposable domains, role accounts, free vs business. Nothing leaves your browser.</p>
+  </div>
+  <div class="workspace">
+    <div class="panel">
+      <div class="panel-hd"><div class="panel-title"><div class="step-dot">01</div> Input</div>
+        <div class="btn-group">
+          <button class="btn btn-outline btn-sm" onclick="verClear()">Clear</button>
+        </div>
+      </div>
+      <div class="panel-bd">
+        <div class="field"><label class="lbl">Email list (one per line or any format)</label>
+          <textarea id="verInput" rows="8" placeholder="Paste emails here…"></textarea>
+        </div>
+        <div style="margin-top:14px;display:flex;gap:16px;flex-wrap:wrap">
+          <label class="check-row"><input type="checkbox" id="verNormGmail" checked/> Normalise Gmail (strip dots &amp; +tags)</label>
+          <label class="check-row"><input type="checkbox" id="verFlagRole" checked/> Flag role accounts (info@, admin@…)</label>
+          <label class="check-row"><input type="checkbox" id="verFlagDisp" checked/> Flag disposable domains</label>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-bd"><button class="btn btn-gold btn-full" onclick="runVerifier()">✓ Verify Emails</button></div>
+    </div>
+    <div id="verResultPanel" style="display:none">
+      <div class="panel">
+        <div class="panel-hd">
+          <div class="panel-title"><div class="step-dot ok">✓</div> Results</div>
+          <div class="btn-group">
+            <button class="btn btn-outline btn-sm" onclick="dlTA('verOutput','verified_emails.csv','email,status,score,reason\n')">CSV</button>
+            <button class="btn btn-outline btn-sm" onclick="copyTA('verOutput')">Copy</button>
+          </div>
+        </div>
+        <div class="panel-bd">
+          <div id="verStats" style="margin-bottom:16px"></div>
+          <div id="verBreakdown" style="margin-bottom:16px;display:flex;gap:8px;flex-wrap:wrap"></div>
+          <div class="field"><label class="lbl">CSV Export (email, status, score, reason)</label>
+            <textarea id="verOutput" rows="10" readonly></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 10: ABOUT DEV -->
+<div class="page" id="page10">
   <div class="hero-banner">
     <div class="eyebrow"><div class="eyebrow-line"></div><div class="eyebrow-text">Developer</div></div>
     <h2>Meet the <em>Developer</em><br/>Behind the Tools</h2>
@@ -1842,8 +2120,8 @@ footer{text-align:center;padding:40px 20px;border-top:1px solid var(--border);ma
 
     <!-- Built with MailForge -->
     <div style="background:var(--ink);border-radius:14px;padding:36px;text-align:center">
-      <div style="font-family:var(--display);font-size:22px;color:white;font-weight:700;margin-bottom:8px">All 9 Tools. One File. <span style="color:var(--gold)">Zero Cost.</span></div>
-      <div style="font-size:13px;color:#6a7a9a;max-width:420px;margin:0 auto;line-height:1.7">MailForge Pro runs 100% in your browser. No login, no subscription, no data ever leaves your device. Built with care by Siyam Ahmed.</div>
+      <div style="font-family:var(--display);font-size:22px;color:white;font-weight:700;margin-bottom:8px">All 10 Tools. One File. <span style="color:var(--gold)">Zero Cost.</span></div>
+      <div style="font-size:13px;color:#6a7a9a;max-width:420px;margin:0 auto;line-height:1.7">MailForge Pro v5.0 runs 100% in your browser. No login, no subscription, no data ever leaves your device. Built with care by Siyam Ahmed.</div>
     </div>
 
   </div>
@@ -1852,7 +2130,7 @@ footer{text-align:center;padding:40px 20px;border-top:1px solid var(--border);ma
 <!-- FOOTER -->
 <footer>
   <div class="footer-logo">Mail<span>Forge</span> Pro</div>
-  <div class="footer-sub">v4.0 · Ultimate Email Marketing Toolkit · 9 Tools · 100% Local</div>
+  <div class="footer-sub">v5.0 · Ultimate Email Marketing Toolkit · 10 Tools · 100% Local</div>
   <div class="footer-cr">© 2025 Siyam Ahmed · All rights reserved · Built with precision</div>
 </footer>
 
@@ -2789,10 +3067,8 @@ function syncMnav(idx){ /* kept for compat */ }
 
 function snavGo(idx){
   switchPage(idx);
-  // scroll content to top
   document.getElementById('mainContent').scrollTo({top:0, behavior:'smooth'});
   window.scrollTo({top:0, behavior:'smooth'});
-  // close sidebar on mobile
   if(window.innerWidth <= 768) sidebarClose();
 }
 
@@ -2809,6 +3085,529 @@ function sidebarClose(){
   document.getElementById('mnavTrigger').classList.remove('is-open');
   document.body.style.overflow = '';
 }
+
+// ═══════════════════════════════════════════════
+// THEME SYSTEM
+// ═══════════════════════════════════════════════
+function setTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem('mfp-theme', t);
+  document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+  const map = {light:'tbLight', auto:'tbAuto', dark:'tbDark'};
+  const el = document.getElementById(map[t]);
+  if(el) el.classList.add('active');
+}
+
+(function initTheme(){
+  const saved = localStorage.getItem('mfp-theme') || 'auto';
+  setTheme(saved);
+})();
+
+// ═══════════════════════════════════════════════
+// COMMAND PALETTE
+// ═══════════════════════════════════════════════
+const CMD_TOOLS = [
+  {idx:0, label:'LeadSeed', desc:'Seed test emails into CSV', kbd:'1',
+   icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12"/><path d="M5 3a7 7 0 0 0 14 0"/><path d="M5 3h14"/><path d="M5 3C5 13 12 18 12 22"/><path d="M19 3C19 13 12 18 12 22"/></svg>'},
+  {idx:1, label:'List Splitter', desc:'Split email lists into chunks', kbd:'2',
+   icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/></svg>'},
+  {idx:2, label:'Variation Generator', desc:'Generate subjects & email bodies', kbd:'3',
+   icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.582a.5.5 0 0 1 0 .963L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></svg>'},
+  {idx:3, label:'Extractor & Cleaner', desc:'Extract emails, remove bounces', kbd:'4',
+   icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>'},
+  {idx:4, label:'Deduplicator', desc:'Remove duplicate emails', kbd:'5',
+   icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/><circle cx="12" cy="12" r="9"/></svg>'},
+  {idx:5, label:'Bulk Tools', desc:'Delimiters, inject, find & replace', kbd:'6',
+   icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>'},
+  {idx:6, label:'Randomizer', desc:'Shuffle lists with seeded PRNG', kbd:'7',
+   icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>'},
+  {idx:7, label:'Image Renamer', desc:'Batch rename 2000 images', kbd:'8',
+   icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>'},
+  {idx:8, label:'Column Converter', desc:'Convert to JSON, SQL, Markdown', kbd:'9',
+   icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>'},
+  {idx:9, label:'Email Verifier', desc:'Syntax, disposable, role checks', kbd:'0',
+   icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>'},
+];
+
+let cmdFocusIdx = 0;
+let cmdFiltered = [...CMD_TOOLS];
+
+function cmdOpen(){
+  document.getElementById('cmdPalette').style.display = 'flex';
+  document.getElementById('cmdInput').value = '';
+  cmdFiltered = [...CMD_TOOLS];
+  cmdRender();
+  setTimeout(()=>document.getElementById('cmdInput').focus(), 50);
+}
+
+function cmdClose(e){
+  if(e && e.target !== document.getElementById('cmdPalette')) return;
+  document.getElementById('cmdPalette').style.display = 'none';
+}
+
+function cmdFilter(q){
+  const lq = q.toLowerCase();
+  cmdFiltered = lq ? CMD_TOOLS.filter(t =>
+    t.label.toLowerCase().includes(lq) || t.desc.toLowerCase().includes(lq)
+  ) : [...CMD_TOOLS];
+  cmdFocusIdx = 0;
+  cmdRender();
+}
+
+function cmdRender(){
+  const el = document.getElementById('cmdResults');
+  if(!cmdFiltered.length){
+    el.innerHTML = '<div class="cmd-empty">No tools match</div>';
+    return;
+  }
+  el.innerHTML = '<div class="cmd-section-label">Tools</div>' +
+    cmdFiltered.map((t,i) => `
+      <div class="cmd-item${i===cmdFocusIdx?' focused':''}" onclick="cmdGo(${t.idx})">
+        <div class="cmd-item-icon">${t.icon}</div>
+        <div style="flex:1;min-width:0">
+          <div class="cmd-item-label">${t.label}</div>
+          <div class="cmd-item-desc">${t.desc}</div>
+        </div>
+        <span class="cmd-item-kbd">${t.kbd}</span>
+      </div>`).join('');
+}
+
+function cmdGo(idx){
+  document.getElementById('cmdPalette').style.display = 'none';
+  snavGo(idx);
+}
+
+function cmdKey(e){
+  if(e.key==='Escape'){ document.getElementById('cmdPalette').style.display='none'; return; }
+  if(e.key==='ArrowDown'){ e.preventDefault(); cmdFocusIdx=Math.min(cmdFocusIdx+1,cmdFiltered.length-1); cmdRender(); return; }
+  if(e.key==='ArrowUp'){ e.preventDefault(); cmdFocusIdx=Math.max(cmdFocusIdx-1,0); cmdRender(); return; }
+  if(e.key==='Enter' && cmdFiltered[cmdFocusIdx]) cmdGo(cmdFiltered[cmdFocusIdx].idx);
+}
+
+// ═══════════════════════════════════════════════
+// SIDEBAR SEARCH (upgraded)
+// ═══════════════════════════════════════════════
+function filterSidebar(q){
+  const query = q.trim().toLowerCase();
+  const items = document.querySelectorAll('#snavList .snav-item');
+  const dividers = document.querySelectorAll('#snavList .snav-divider');
+  let visible = 0;
+  if(!query){
+    items.forEach(el => el.style.display = '');
+    dividers.forEach(el => el.style.display = '');
+    document.getElementById('snavNoResult').style.display = 'none';
+    document.getElementById('sidebarToolCount').textContent = '10 tools available';
+    return;
+  }
+  dividers.forEach(el => el.style.display = 'none');
+  items.forEach(el => {
+    const label = (el.dataset.label || el.querySelector('.snav-label')?.textContent || '').toLowerCase();
+    const match = label.includes(query);
+    el.style.display = match ? '' : 'none';
+    if(match) visible++;
+  });
+  document.getElementById('snavNoResult').style.display = visible ? 'none' : 'block';
+  document.getElementById('sidebarToolCount').textContent = `${visible} tool${visible!==1?'s':''} found`;
+}
+
+// ═══════════════════════════════════════════════
+// KEYBOARD SHORTCUTS
+// ═══════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  if(['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) return;
+  if((e.metaKey||e.ctrlKey) && e.key==='k'){ e.preventDefault(); cmdOpen(); return; }
+  if(e.key==='/'){ e.preventDefault(); cmdOpen(); return; }
+  if(e.key==='Escape'){ sidebarClose(); return; }
+  const k = parseInt(e.key);
+  if(k>=1 && k<=9){ snavGo(k-1); return; }
+  if(e.key==='0'){ snavGo(9); return; }
+});
+
+// ═══════════════════════════════════════════════
+// BACK TO TOP
+// ═══════════════════════════════════════════════
+window.addEventListener('scroll', () => {
+  document.getElementById('backToTop')?.classList.toggle('show', window.scrollY > 300);
+}, {passive:true});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const mc = document.getElementById('mainContent');
+  if(mc) mc.addEventListener('scroll', () => {
+    document.getElementById('backToTop')?.classList.toggle('show', mc.scrollTop > 300);
+  }, {passive:true});
+});
+
+// ═══════════════════════════════════════════════
+// PAGE 9: EMAIL VERIFIER
+// ═══════════════════════════════════════════════
+const DISPOSABLE_DOMAINS = new Set([
+  'mailinator.com','guerrillamail.com','temp-mail.org','10minutemail.com','throwam.com',
+  'yopmail.com','fakeinbox.com','maildrop.cc','dispostable.com','trashmail.com',
+  'sharklasers.com','guerrillamailblock.com','grr.la','guerrillamail.info','spam4.me',
+  'tempmail.com','tempr.email','discard.email','spamgourmet.com','trashmail.at',
+  'trashmail.io','trashmail.me','spamhereplease.com','spamhere.eu','mailnull.com',
+  'noclickemail.com','getairmail.com','filzmail.com','throwam.com','mail-filter.com',
+  'spamfree24.org','spamgob.com','notsharingmy.info','discardmail.com','spam.la',
+  'be-a-detective.com','gowikibooks.com','gowikicampus.com','gowikipedia.org',
+  'mailboxy.fun','tmpmail.net','burnermail.io','inboxkitten.com','moakt.com',
+  'mailtemp.info','gettempemail.com','temp-mail.de','mailnesia.com','mailnew.com',
+  'nwytg.net','moncourrier.fr.nf','spamgap.com','binkmail.com','bo.lt',
+  'damnthespam.com','freemail.ms','knol-power.nl','spam.su','spamdecoy.net',
+]);
+const ROLE_PREFIXES = new Set([
+  'admin','administrator','webmaster','hostmaster','postmaster','abuse','noreply',
+  'no-reply','info','support','help','sales','marketing','billing','contact',
+  'hello','team','mail','email','news','newsletter','service','services',
+  'office','staff','hr','legal','security','privacy','jobs','careers',
+]);
+
+function verifyEmail(raw, normGmail, flagRole, flagDisp){
+  const email = raw.trim().toLowerCase();
+  const reasons = [];
+  let score = 100;
+
+  // Syntax check
+  const syntaxOk = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,63}$/.test(email);
+  if(!syntaxOk){ return {email, status:'invalid', score:0, reason:'Invalid syntax'}; }
+
+  const [local, domain] = email.split('@');
+
+  // Normalise Gmail
+  let normalised = email;
+  if(normGmail && (domain==='gmail.com'||domain==='googlemail.com')){
+    normalised = local.replace(/\./g,'').split('+')[0] + '@gmail.com';
+  }
+
+  // Disposable
+  if(flagDisp && DISPOSABLE_DOMAINS.has(domain)){
+    reasons.push('disposable'); score -= 60;
+  }
+
+  // Role account
+  if(flagRole && ROLE_PREFIXES.has(local.split('+')[0].split('.')[0])){
+    reasons.push('role-account'); score -= 30;
+  }
+
+  // Free provider
+  const FREE = new Set(['gmail.com','yahoo.com','hotmail.com','outlook.com','aol.com',
+    'icloud.com','protonmail.com','mail.com','zoho.com','yandex.com','live.com',
+    'msn.com','googlemail.com','me.com','mac.com','inbox.com']);
+  const isFree = FREE.has(domain);
+  if(!isFree && !DISPOSABLE_DOMAINS.has(domain)) reasons.push('business');
+  else if(isFree) reasons.push('free-provider');
+
+  // TLD check
+  const tld = domain.split('.').pop();
+  if(tld.length < 2){ reasons.push('bad-tld'); score -= 20; }
+
+  // Length sanity
+  if(email.length > 254){ reasons.push('too-long'); score -= 20; }
+
+  score = Math.max(0, Math.min(100, score));
+  const status = score >= 70 ? 'valid' : score >= 40 ? 'risky' : 'invalid';
+  return {email: normalised || email, status, score, reason: reasons.join(', ') || 'ok'};
+}
+
+function runVerifier(){
+  const text = document.getElementById('verInput').value;
+  if(!text.trim()){ toast('Paste some emails first','err'); return; }
+  const normGmail = document.getElementById('verNormGmail').checked;
+  const flagRole  = document.getElementById('verFlagRole').checked;
+  const flagDisp  = document.getElementById('verFlagDisp').checked;
+
+  const raw = [...new Set((text.match(emailRegex)||[]).map(e=>e.toLowerCase()))];
+  if(!raw.length){ toast('No emails found','err'); return; }
+
+  const results = raw.map(e => verifyEmail(e, normGmail, flagRole, flagDisp));
+  const valid   = results.filter(r=>r.status==='valid').length;
+  const risky   = results.filter(r=>r.status==='risky').length;
+  const invalid = results.filter(r=>r.status==='invalid').length;
+
+  document.getElementById('verStats').innerHTML = statHtml([
+    {val:raw.length.toLocaleString(), lbl:'Total'},
+    {val:valid.toLocaleString(), lbl:'Valid', cls:'green'},
+    {val:risky.toLocaleString(), lbl:'Risky', cls:'gold'},
+    {val:invalid.toLocaleString(), lbl:'Invalid', cls:'red'},
+  ]);
+
+  const breakdown = document.getElementById('verBreakdown');
+  const disposable = results.filter(r=>r.reason.includes('disposable')).length;
+  const role       = results.filter(r=>r.reason.includes('role-account')).length;
+  const business   = results.filter(r=>r.reason.includes('business')).length;
+  breakdown.innerHTML = [
+    disposable ? `<div class="bp"><div class="bp-dot" style="background:#f07070"></div><span class="bp-email">Disposable</span><span class="bp-count">· ${disposable}</span></div>` : '',
+    role ? `<div class="bp"><div class="bp-dot" style="background:#c9a84c"></div><span class="bp-email">Role accounts</span><span class="bp-count">· ${role}</span></div>` : '',
+    business ? `<div class="bp"><div class="bp-dot" style="background:#4fc98e"></div><span class="bp-email">Business</span><span class="bp-count">· ${business}</span></div>` : '',
+  ].join('');
+
+  document.getElementById('verOutput').value =
+    results.map(r=>`${r.email},${r.status},${r.score},${r.reason}`).join('\n');
+  document.getElementById('verResultPanel').style.display = 'block';
+  document.getElementById('verResultPanel').scrollIntoView({behavior:'smooth', block:'start'});
+  toast(`${valid} valid · ${risky} risky · ${invalid} invalid`, valid>risky+invalid?'ok':'');
+}
+
+function verClear(){
+  document.getElementById('verInput').value='';
+  document.getElementById('verResultPanel').style.display='none';
+}
+
+// ═══════════════════════════════════════════════
+// UPGRADED: RANDOMIZER — Seeded PRNG + Sample mode
+// ═══════════════════════════════════════════════
+function mulberry32(seed){
+  return function(){
+    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+    let t = Math.imul(seed ^ seed>>>15, 1|seed);
+    t = t + Math.imul(t ^ t>>>7, 61|t) ^ t;
+    return ((t ^ t>>>14)>>>0) / 4294967296;
+  };
+}
+
+function fisherYatesSeeded(arr, rng){
+  const a=[...arr]; let c=a.length,t,i;
+  while(c>0){i=Math.floor(rng()*c);c--;t=a[c];a[c]=a[i];a[i]=t;}
+  return a;
+}
+
+// Override original randomizeList to support seeded mode
+const _origRandomize = window.randomizeList;
+window.randomizeList = function(){
+  const text = document.getElementById('randInput').value;
+  if(!text.trim()){ toast('Provide a list first','err'); return; }
+  const lines = text.split('\n').map(l=>l.trim()).filter(l=>l);
+  if(!lines.length){ toast('No valid lines found','err'); return; }
+
+  const seedEl = document.getElementById('randSeed');
+  const sampleEl = document.getElementById('randSample');
+  const seedVal = seedEl ? seedEl.value.trim() : '';
+  const sampleN = sampleEl ? parseInt(sampleEl.value)||0 : 0;
+
+  let result;
+  if(seedVal){
+    // Hash seed string to number
+    let h = 0; for(const c of seedVal) h = Math.imul(31,h)+c.charCodeAt(0)|0;
+    const rng = mulberry32(h>>>0);
+    result = fisherYatesSeeded(lines, rng);
+  } else {
+    result = fisherYates(lines);
+  }
+
+  if(sampleN > 0 && sampleN < result.length) result = result.slice(0, sampleN);
+
+  document.getElementById('randResult').value = result.join('\n');
+  document.getElementById('randStatsWrap').innerHTML = statHtml([
+    {val:lines.length.toLocaleString(), lbl:'Input Lines'},
+    {val:result.length.toLocaleString(), lbl:sampleN?'Sampled':'Shuffled', cls:'green'},
+    {val:seedVal?'seeded':'random', lbl:'Mode'},
+  ]);
+  document.getElementById('randResultPanel').style.display='block';
+  toast(`${result.length.toLocaleString()} lines ${sampleN?'sampled':'shuffled'}${seedVal?' (seeded)':''}`, 'ok');
+};
+
+// ═══════════════════════════════════════════════
+// UPGRADED: DEDUPLICATOR — Gmail normalisation + Cross-list
+// ═══════════════════════════════════════════════
+function gmailNorm(email){
+  const [local,domain] = email.split('@');
+  if(!domain) return email;
+  if(domain==='gmail.com'||domain==='googlemail.com'){
+    return local.replace(/\./g,'').split('+')[0]+'@gmail.com';
+  }
+  return email;
+}
+
+// Wrap removeDups to add Gmail normalization checkbox
+const _origRemoveDups = window.removeDups;
+window.removeDups = function(){
+  const text = document.getElementById('dupInput').value;
+  if(!text.trim()){ toast('Provide an email list','err'); return; }
+  const cs    = document.getElementById('dupCase').checked;
+  const sort  = document.getElementById('dupSort').checked;
+  const showD = document.getElementById('dupShowDups').checked;
+  const group = document.getElementById('dupGroup').checked;
+  const normG = document.getElementById('dupNormGmail')?.checked;
+
+  let emails = (text.match(emailRegex)||[]).map(e=>cs?e:e.toLowerCase());
+  if(normG) emails = emails.map(gmailNorm);
+
+  const orig=emails.length, unique=new Set(), dups=[];
+  emails.forEach(e=>{ unique.has(e)?dups.push(e):unique.add(e); });
+  let result=[...unique];
+  if(sort) result.sort();
+  if(group){
+    const g={};
+    result.forEach(e=>{const d=e.split('@')[1];(g[d]=g[d]||[]).push(e);});
+    const rows=[];
+    Object.keys(g).sort().forEach(d=>{rows.push(`\n--- ${d} ---`);g[d].sort().forEach(e=>rows.push(e));});
+    result=rows.slice(1);
+  }
+  document.getElementById('dupResult').value=result.join('\n');
+  document.getElementById('dupStatsWrap').innerHTML=statHtml([
+    {val:orig.toLocaleString(),lbl:'Input'},
+    {val:dups.length.toLocaleString(),lbl:'Duplicates',cls:'red'},
+    {val:unique.size.toLocaleString(),lbl:'Unique',cls:'green'},
+  ]);
+  if(showD&&dups.length){
+    document.getElementById('dupDupList').value=[...new Set(dups)].sort().join('\n');
+    document.getElementById('dupListPanel').style.display='block';
+  } else document.getElementById('dupListPanel').style.display='none';
+  document.getElementById('dupResultPanel').style.display='block';
+  toast(`${dups.length} duplicates removed`,'ok');
+};
+
+// Cross-list dedup
+function crossListDedup(){
+  const listA=(document.getElementById('dupInput').value.match(emailRegex)||[]).map(e=>e.toLowerCase());
+  const listB=(document.getElementById('dupCrossB')?.value.match(emailRegex)||[]).map(e=>e.toLowerCase());
+  if(!listA.length||!listB.length){toast('Both lists needed','err');return;}
+  const setA=new Set(listA), setB=new Set(listB);
+  const inter=[...setA].filter(e=>setB.has(e));
+  const aOnly=[...setA].filter(e=>!setB.has(e));
+  const bOnly=[...setB].filter(e=>!setA.has(e));
+  const union=[...new Set([...setA,...setB])].sort();
+  const mode=document.getElementById('crossMode')?.value||'a-only';
+  const out = mode==='intersect'?inter : mode==='a-only'?aOnly : mode==='b-only'?bOnly : union;
+  document.getElementById('dupResult').value=out.sort().join('\n');
+  document.getElementById('dupStatsWrap').innerHTML=statHtml([
+    {val:setA.size.toLocaleString(),lbl:'List A'},
+    {val:setB.size.toLocaleString(),lbl:'List B'},
+    {val:inter.length.toLocaleString(),lbl:'A∩B',cls:'gold'},
+    {val:out.length.toLocaleString(),lbl:'Result',cls:'green'},
+  ]);
+  document.getElementById('dupResultPanel').style.display='block';
+  toast(`${out.length} emails in result`,'ok');
+}
+
+// ═══════════════════════════════════════════════
+// UPGRADED: BULK TOOLS — Find & Replace + Sort
+// ═══════════════════════════════════════════════
+function findReplace(){
+  const text = document.getElementById('bulkInput').value;
+  const find = document.getElementById('frFind')?.value;
+  const repl = document.getElementById('frReplace')?.value||'';
+  const useRegex = document.getElementById('frRegex')?.checked;
+  const caseSens = document.getElementById('frCase')?.checked;
+  if(!text.trim()||!find){ toast('Provide input and search term','err'); return; }
+  let result;
+  try{
+    const flags = 'g' + (caseSens?'':'i');
+    const pattern = useRegex ? new RegExp(find, flags) : new RegExp(find.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), flags);
+    result = text.replace(pattern, repl);
+    const count = (text.match(pattern)||[]).length;
+    document.getElementById('bulkResult').value = result;
+    document.getElementById('bulkStatsWrap').innerHTML = statHtml([{val:count.toLocaleString(),lbl:'Replacements',cls:'green'}]);
+    document.getElementById('bulkResultPanel').style.display='block';
+    toast(`${count} replacement${count!==1?'s':''}`, 'ok');
+  } catch(err){ toast('Invalid regex: '+err.message,'err'); }
+}
+
+function sortList(){
+  const text = document.getElementById('bulkInput').value;
+  const mode = document.getElementById('sortMode')?.value||'alpha';
+  if(!text.trim()){ toast('Provide input list','err'); return; }
+  let lines = text.split('\n').map(l=>l.trim()).filter(l=>l);
+  switch(mode){
+    case 'alpha':   lines.sort(); break;
+    case 'alpha-d': lines.sort().reverse(); break;
+    case 'length':  lines.sort((a,b)=>a.length-b.length); break;
+    case 'length-d':lines.sort((a,b)=>b.length-a.length); break;
+    case 'domain':  lines.sort((a,b)=>{const da=(a.split('@')[1]||a),db=(b.split('@')[1]||b);return da.localeCompare(db);}); break;
+    case 'random':  lines=fisherYates(lines); break;
+  }
+  document.getElementById('bulkResult').value=lines.join('\n');
+  document.getElementById('bulkStatsWrap').innerHTML=statHtml([{val:lines.length.toLocaleString(),lbl:'Lines Sorted',cls:'green'}]);
+  document.getElementById('bulkResultPanel').style.display='block';
+  toast(`Sorted ${lines.length} lines`,'ok');
+}
+
+function caseTransform(){
+  const text = document.getElementById('bulkInput').value;
+  const mode = document.getElementById('caseMode')?.value||'lower';
+  if(!text.trim()){ toast('Provide input','err'); return; }
+  let result;
+  switch(mode){
+    case 'lower': result=text.toLowerCase(); break;
+    case 'upper': result=text.toUpperCase(); break;
+    case 'title': result=text.replace(/\b\w/g,c=>c.toUpperCase()); break;
+    case 'trim':  result=text.split('\n').map(l=>l.trim()).join('\n'); break;
+  }
+  document.getElementById('bulkResult').value=result;
+  document.getElementById('bulkResultPanel').style.display='block';
+  toast('Done','ok');
+}
+
+// ═══════════════════════════════════════════════
+// UPGRADED: COL CONVERTER — JSON / SQL / Markdown
+// ═══════════════════════════════════════════════
+const _origCvConvert = window.cvConvert;
+window.cvConvert = function(){
+  const fmt = document.getElementById('cvOutputFmt')?.value||'delimited';
+  if(fmt==='delimited'){ _origCvConvert && _origCvConvert(); return; }
+
+  const raw = document.getElementById('cvInp').value;
+  const tidy = document.getElementById('cvTidyGrp')?.querySelector('.toggle-pill.on')?.dataset.v==='yes';
+  const dedup = document.getElementById('cvDupGrp')?.querySelector('.toggle-pill.on')?.dataset.v==='yes';
+  let recs = raw.split('\n').map(r=>r.trim());
+  if(tidy) recs=recs.filter(r=>r);
+  if(dedup) recs=[...new Set(recs)];
+  const nonEmpty=recs.filter(r=>r);
+
+  let output='';
+  const tbl = document.getElementById('cvTblName')?.value.trim()||'records';
+  const col  = document.getElementById('cvColName')?.value.trim()||'value';
+
+  if(fmt==='json'){
+    output = JSON.stringify(nonEmpty, null, 2);
+  } else if(fmt==='jsonl'){
+    output = nonEmpty.map(r=>JSON.stringify({[col]:r})).join('\n');
+  } else if(fmt==='sql'){
+    output = nonEmpty.map(r=>`INSERT INTO \`${tbl}\` (\`${col}\`) VALUES ('${r.replace(/'/g,"\\'")}');`).join('\n');
+  } else if(fmt==='md'){
+    output = `| ${col} |\n|---|\n`+nonEmpty.map(r=>`| ${r} |`).join('\n');
+  } else if(fmt==='html'){
+    output = `<table>\n  <thead><tr><th>${col}</th></tr></thead>\n  <tbody>\n`+
+      nonEmpty.map(r=>`    <tr><td>${r.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</td></tr>`).join('\n')+
+      '\n  </tbody>\n</table>';
+  }
+  document.getElementById('cvOut').value=output;
+  document.getElementById('cvStatOut').textContent=nonEmpty.length;
+  document.getElementById('cvStatLines').textContent=output.split('\n').length;
+  document.getElementById('cvOutNote').textContent=fmt.toUpperCase()+' output';
+};
+
+// ═══════════════════════════════════════════════
+// UPGRADED: VARIATION GENERATOR — Spam checker
+// ═══════════════════════════════════════════════
+const SPAM_WORDS = [
+  'free','guarantee','guaranteed','unlimited','urgent','act now','click here','order now',
+  'buy now','limited time','special offer','special promotion','congratulations','winner',
+  'you won','you have been selected','risk-free','no cost','no fees','no obligation',
+  'cash','prize','reward','bonus','discount','save big','earn money','make money',
+  'work from home','income','profit','100%','amazing','incredible','exclusive deal',
+  'once in a lifetime','as seen on','dear friend','this is not spam','remove','opt out',
+];
+
+function spamCheck(){
+  const subj = (document.getElementById('vCustomSub')?.value || '').toLowerCase();
+  const found = SPAM_WORDS.filter(w => subj.includes(w));
+  const scoreEl = document.getElementById('spamScore');
+  if(!scoreEl) return;
+  if(!subj){ scoreEl.style.display='none'; return; }
+  const score = Math.min(100, found.length * 15);
+  const color = score===0?'var(--green)':score<40?'var(--gold)':'var(--red)';
+  scoreEl.style.display='flex';
+  scoreEl.innerHTML=`<span style="font-family:var(--mono);font-size:11px;color:${color};display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--paper);border:1px solid var(--border);border-radius:8px">
+    <span style="font-size:16px">${score===0?'✅':score<40?'⚠️':'🚫'}</span>
+    Spam score: <strong>${score}/100</strong>${found.length?` · triggers: ${found.slice(0,4).join(', ')}${found.length>4?'…':''}`:' · Clean!'}
+  </span>`;
+}
+
+// Attach spam checker to subject input
+document.addEventListener('DOMContentLoaded',()=>{
+  const subEl = document.getElementById('vCustomSub');
+  if(subEl) subEl.addEventListener('input', spamCheck);
+});
 
 // ═══════════════════════════════════════════════
 // SIDEBAR SEARCH
