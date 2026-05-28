@@ -2,7 +2,7 @@
 
 > **10 professional email marketing tools. 100% local — nothing ever leaves your browser.**
 
-🔗 **Live:** https://ahmedsiyam444.github.io/MailForge-Pro/
+🔗 **Live:** https://arcticfame.github.io/MailForge-Pro/
 
 ## ✨ Tools
 
